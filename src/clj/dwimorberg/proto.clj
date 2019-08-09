@@ -2,25 +2,33 @@
 
 ;; (set! *warn-on-reflection* true)
 
-(defprotocol IFractionalSingleArityOps
-  (^Number floor [_ ^Number n]))
+;; (definterface IFractionalSingleArityOps
+;;   (^Number floor [_ ^Number n]))
 
-(defprotocol ISingleArityOps
-  (^Number abs [_ ^Number n]))
+;; (definterface ISingleArityOps
+;;   (^Number abs [_ ^Number n]))
 
-(defprotocol ITwoArityOps
-  (^Number add [_ ^Number x ^Number y]))
+(gen-interface
+ :name dwimorberg.proto.ISingleArityOps
+ :methods [ [abs [Number] Number] ])
 
-(defprotocol IThreeArityOps
-  (^Number modpow [_ ^Number x ^Number y ^Number z]))
+;; (definterface ITwoArityOps
+;;   (^Number add [_ ^Number x ^Number y]))
 
-(defprotocol IDispatch
-  (^ISingleArityOps singleOps [_])
-  (^IFractionalSingleArityOps fracSingleOps [_])
-  (^clojure.lang.Symbol dispatchType [_]))
+;; (definterface IThreeArityOps
+;;   (^Number modpow [_ ^Number x ^Number y ^Number z]))
 
-(defprotocol IWithTwo
-  (^ITwoArityOps withTwo [_ ^IDispatch n]))
+;; (definterface IDispatch
+;;   (^ISingleArityOps singleOps [])
+;;   (^IFractionalSingleArityOps fracSingleOps [])
+;;   (^clojure.lang.Symbol dispatchType []))
 
-(defprotocol IWithThree
-  (^IThreeArityOps withThree [_ ^IDispatch n]))
+(gen-interface
+ :name dwimorberg.proto.IDispatch
+ :methods [ [singleOps [] dwimorberg.proto.ISingleArityOps] ])
+
+;; (definterface IWithTwo
+;;   (^ITwoArityOps withTwo [^IDispatch n]))
+
+;; (definterface IWithThree
+;;   (^IThreeArityOps withThree [^IDispatch n]))

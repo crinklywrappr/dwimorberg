@@ -122,34 +122,12 @@
 (def ^:dynamic *default-ops* (->DefaultOps))
 
 
-(extend-protocol IDispatch
-  Long
+(extend-type Long
+  IDispatch
   (singleOps [_] *long-ops*)
   (fracSingleOps [_] *default-ops*)
   (dispatchType [_] 'Long)
-  Double
-  (singleOps [_] *double-ops*)
-  (fracSingleOps [_] *double-ops*)
-  (dispatchType [_] 'Double)
-  BigInteger
-  (singleOps [_] *biginteger-ops*)
-  (fracSingleOps [_] *default-ops*)
-  (dispatchType [_] 'BigInteger)
-  BigInt
-  (singleOps [_] *bigint-ops*)
-  (fracSingleOps [_] *default-ops*)
-  (dispatchType [_] 'BigInt)
-  Ratio
-  (singleOps [_] *ratio-ops*)
-  (fracSingleOps [_] *ratio-ops*)
-  (dispatchType [_] 'Ratio)
-  BigDecimal
-  (singleOps [_] *bigdec-ops*)
-  (fracSingleOps [_] *bigdec-ops*)
-  (dispatchType [_] 'BigDec))
-
-(extend-protocol IWithTwo
-  Long
+  IWithTwo
   (withTwo [_ n]
     (let [t (dispatchType n) ]
       (case t
@@ -158,8 +136,14 @@
         BigInteger *long-x-biginteger-ops*
         BigInt *long-x-bigint-ops*
         Ratio *long-x-ratio-ops*
-        BigDec *long-x-bigdec-ops*)))
-  Double
+        BigDec *long-x-bigdec-ops*))))
+
+(extend-type Double
+  IDispatch
+  (singleOps [_] *double-ops*)
+  (fracSingleOps [_] *double-ops*)
+  (dispatchType [_] 'Double)
+  IWithTwo
   (withTwo [_ n]
     (let [t (dispatchType n)]
       (case t
@@ -168,8 +152,14 @@
         BigInteger *double-x-biginteger-ops*
         BigInt *double-x-bigint-ops*
         Ratio *double-x-ratio-ops*
-        BigDec *double-x-bigdec-ops*)))
-  BigInteger
+        BigDec *double-x-bigdec-ops*))))
+
+(extend-type BigInteger
+  IDispatch
+  (singleOps [_] *biginteger-ops*)
+  (fracSingleOps [_] *default-ops*)
+  (dispatchType [_] 'BigInteger)
+  IWithTwo
   (withTwo [_ n]
     (let [t (dispatchType n)]
       (case t
@@ -178,8 +168,14 @@
         BigInteger *biginteger-x-biginteger-ops*
         BigInt *biginteger-x-bigint-ops*
         Ratio *biginteger-x-ratio-ops*
-        BigDec *biginteger-x-bigdec-ops*)))
-  BigInt
+        BigDec *biginteger-x-bigdec-ops*))))
+
+(extend-type BigInt
+  IDispatch
+  (singleOps [_] *bigint-ops*)
+  (fracSingleOps [_] *default-ops*)
+  (dispatchType [_] 'BigInt)
+  IWithTwo
   (withTwo [_ n]
     (let [t (dispatchType n)]
       (case t
@@ -188,8 +184,14 @@
         BigInteger *bigint-x-biginteger-ops*
         BigInt *bigint-x-bigint-ops*
         Ratio *bigint-x-ratio-ops*
-        BigDec *bigint-x-bigdec-ops*)))
-  Ratio
+        BigDec *bigint-x-bigdec-ops*))))
+
+(extend-type Ratio
+  IDispatch
+  (singleOps [_] *ratio-ops*)
+  (fracSingleOps [_] *ratio-ops*)
+  (dispatchType [_] 'Ratio)
+  IWithTwo
   (withTwo [_ n]
     (let [t (dispatchType n)]
       (case t
@@ -198,8 +200,14 @@
         BigInteger *ratio-x-biginteger-ops*
         BigInt *ratio-x-bigint-ops*
         Ratio *ratio-x-ratio-ops*
-        BigDec *ratio-x-bigdec-ops*)))
-  BigDecimal
+        BigDec *ratio-x-bigdec-ops*))))
+
+(extend-type BigDecimal
+  IDispatch
+  (singleOps [_] *bigdec-ops*)
+  (fracSingleOps [_] *bigdec-ops*)
+  (dispatchType [_] 'BigDec)
+  IWithTwo
   (withTwo [_ n]
     (let [t (dispatchType n)]
       (case t
