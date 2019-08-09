@@ -11,6 +11,7 @@
            [dwimorberg Common]))
 
 ;; (set! *warn-on-reflection* true)
+;; (set! *unchecked-math* :warn-on-boxed)
 
 (def ^:dynamic *long-x-long-ops* (->LongxLongOps))
 (def ^:dynamic *long-x-double-ops* (->LongxDoubleOps))
@@ -57,7 +58,16 @@
 
 (defrecord LongOps []
   ISingleArityOps
-  (abs [_ n] (Math/abs ^long n)))
+  (abs [_ n] (Math/abs ^long n))
+  IWithTwo
+  (withTwo [_ n]
+    (cond
+      (instance? Long n) *long-x-long-ops*
+      (instance? Double n) *long-x-double-ops*
+      (instance? BigInteger n) *long-x-biginteger-ops*
+      (instance? BigInt n) *long-x-bigint-ops*
+      (instance? Ratio n) *long-x-ratio-ops*
+      (instance? BigDecimal n) *long-x-bigdec-ops*)))
 
 (defrecord DoubleOps []
   IFractionalSingleArityOps
@@ -66,18 +76,45 @@
       (Math/floor ^double n)
       (.setScale (bigdec n) 0 RoundingMode/FLOOR)))
   ISingleArityOps
-  (abs [_ n] (Math/abs ^double n)))
+  (abs [_ n] (Math/abs ^double n))
+  IWithTwo
+  (withTwo [_ n]
+    (cond
+      (instance? Long n) *double-x-long-ops*
+      (instance? Double n) *double-x-double-ops*
+      (instance? BigInteger n) *double-x-biginteger-ops*
+      (instance? BigInt n) *double-x-bigint-ops*
+      (instance? Ratio n) *double-x-ratio-ops*
+      (instance? BigDecimal n) *double-x-bigdec-ops*)))
 
 (defrecord BigIntegerOps []
   ISingleArityOps
-  (abs [_ n] (.abs ^BigInteger n)))
+  (abs [_ n] (.abs ^BigInteger n))
+  IWithTwo
+  (withTwo [_ n]
+    (cond
+      (instance? Long n) *biginteger-x-long-ops*
+      (instance? Double n) *biginteger-x-double-ops*
+      (instance? BigInteger n) *biginteger-x-biginteger-ops*
+      (instance? BigInt n) *biginteger-x-bigint-ops*
+      (instance? Ratio n) *biginteger-x-ratio-ops*
+      (instance? BigDecimal n) *biginteger-x-bigdec-ops*)))
 
 (defrecord BigIntOps []
   ISingleArityOps
   (abs [_ n]
     (if (nil? (.bipart ^BigInt n))
       (Math/abs ^long (.lpart ^BigInt n))
-      (.abs ^BigInteger (.bipart ^BigInt n)))))
+      (.abs ^BigInteger (.bipart ^BigInt n))))
+  IWithTwo
+  (withTwo [_ n]
+    (cond
+      (instance? Long n) *bigint-x-long-ops*
+      (instance? Double n) *bigint-x-double-ops*
+      (instance? BigInteger n) *bigint-x-biginteger-ops*
+      (instance? BigInt n) *bigint-x-bigint-ops*
+      (instance? Ratio n) *bigint-x-ratio-ops*
+      (instance? BigDecimal n) *bigint-x-bigdec-ops*)))
 
 (defrecord RatioOps []
   IFractionalSingleArityOps
@@ -99,14 +136,32 @@
       (cond
         (and (neg? numer) (pos? denom)) (/ (.negate numer) denom)
         (and (pos? numer) (neg? denom)) (/ numer (.negate denom))
-        :else n))))
+        :else n)))
+  IWithTwo
+  (withTwo [_ n]
+    (cond
+      (instance? Long n) *ratio-x-long-ops*
+      (instance? Double n) *ratio-x-double-ops*
+      (instance? BigInteger n) *ratio-x-biginteger-ops*
+      (instance? BigInt n) *ratio-x-bigint-ops*
+      (instance? Ratio n) *ratio-x-ratio-ops*
+      (instance? BigDecimal n) *ratio-x-bigdec-ops*)))
 
 (defrecord BigDecOps []
   IFractionalSingleArityOps
   (floor [_ n]
     (.setScale ^BigDecimal n 0 RoundingMode/FLOOR))
   ISingleArityOps
-  (abs [_ n] (.abs ^BigDecimal n)))
+  (abs [_ n] (.abs ^BigDecimal n))
+  IWithTwo
+  (withTwo [_ n]
+    (cond
+      (instance? Long n) *bigdec-x-long-ops*
+      (instance? Double n) *bigdec-x-double-ops*
+      (instance? BigInteger n) *bigdec-x-biginteger-ops*
+      (instance? BigInt n) *bigdec-x-bigint-ops*
+      (instance? Ratio n) *bigdec-x-ratio-ops*
+      (instance? BigDecimal n) *bigdec-x-bigdec-ops*)))
 
 (defrecord DefaultOps []
   IFractionalSingleArityOps
@@ -122,90 +177,22 @@
 (def ^:dynamic *default-ops* (->DefaultOps))
 
 
-(extend-protocol IDispatch
-  Long
-  (singleOps [_] *long-ops*)
-  (fracSingleOps [_] *default-ops*)
-  (dispatchType [_] 'Long)
-  Double
-  (singleOps [_] *double-ops*)
-  (fracSingleOps [_] *double-ops*)
-  (dispatchType [_] 'Double)
-  BigInteger
-  (singleOps [_] *biginteger-ops*)
-  (fracSingleOps [_] *default-ops*)
-  (dispatchType [_] 'BigInteger)
-  BigInt
-  (singleOps [_] *bigint-ops*)
-  (fracSingleOps [_] *default-ops*)
-  (dispatchType [_] 'BigInt)
-  Ratio
-  (singleOps [_] *ratio-ops*)
-  (fracSingleOps [_] *ratio-ops*)
-  (dispatchType [_] 'Ratio)
-  BigDecimal
-  (singleOps [_] *bigdec-ops*)
-  (fracSingleOps [_] *bigdec-ops*)
-  (dispatchType [_] 'BigDec))
+(defrecord Ops []
+  IOps
+  (singleOps [_ n]
+    (cond
+      (instance? Long n) *long-ops*
+      (instance? Double n) *double-ops*
+      (instance? BigInteger n) *biginteger-ops*
+      (instance? BigInt n) *bigint-ops*
+      (instance? Ratio n) *ratio-ops*
+      (instance? BigDecimal n) *bigdec-ops*))
+  (fracSingleOps [_ n]
+    (cond
+      (instance? Double n) *double-ops*
+      (instance? Ratio n) *ratio-ops*
+      (instance? BigDecimal n) *bigdec-ops*
+      :else *default-ops*)))
 
-(extend-protocol IWithTwo
-  Long
-  (withTwo [_ n]
-    (let [t (dispatchType n) ]
-      (case t
-        Long *long-x-long-ops*
-        Double *long-x-double-ops*
-        BigInteger *long-x-biginteger-ops*
-        BigInt *long-x-bigint-ops*
-        Ratio *long-x-ratio-ops*
-        BigDec *long-x-bigdec-ops*)))
-  Double
-  (withTwo [_ n]
-    (let [t (dispatchType n)]
-      (case t
-        Long *double-x-long-ops*
-        Double *double-x-double-ops*
-        BigInteger *double-x-biginteger-ops*
-        BigInt *double-x-bigint-ops*
-        Ratio *double-x-ratio-ops*
-        BigDec *double-x-bigdec-ops*)))
-  BigInteger
-  (withTwo [_ n]
-    (let [t (dispatchType n)]
-      (case t
-        Long *biginteger-x-long-ops*
-        Double *biginteger-x-double-ops*
-        BigInteger *biginteger-x-biginteger-ops*
-        BigInt *biginteger-x-bigint-ops*
-        Ratio *biginteger-x-ratio-ops*
-        BigDec *biginteger-x-bigdec-ops*)))
-  BigInt
-  (withTwo [_ n]
-    (let [t (dispatchType n)]
-      (case t
-        Long *bigint-x-long-ops*
-        Double *bigint-x-double-ops*
-        BigInteger *bigint-x-biginteger-ops*
-        BigInt *bigint-x-bigint-ops*
-        Ratio *bigint-x-ratio-ops*
-        BigDec *bigint-x-bigdec-ops*)))
-  Ratio
-  (withTwo [_ n]
-    (let [t (dispatchType n)]
-      (case t
-        Long *ratio-x-long-ops*
-        Double *ratio-x-double-ops*
-        BigInteger *ratio-x-biginteger-ops*
-        BigInt *ratio-x-bigint-ops*
-        Ratio *ratio-x-ratio-ops*
-        BigDec *ratio-x-bigdec-ops*)))
-  BigDecimal
-  (withTwo [_ n]
-    (let [t (dispatchType n)]
-      (case t
-        Long *bigdec-x-long-ops*
-        Double *bigdec-x-double-ops*
-        BigInteger *bigdec-x-biginteger-ops*
-        BigInt *bigdec-x-bigint-ops*
-        Ratio *bigdec-x-ratio-ops*
-        BigDec *bigdec-x-bigdec-ops*))))
+
+(def ^:dynamic *ops* (->Ops))

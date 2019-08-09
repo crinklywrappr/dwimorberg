@@ -10,10 +10,9 @@
   :repl-options {:init-ns dwimorberg.core}
   :source-paths ["src/clj"]
   :java-source-paths ["src/jvm"]
-  ;; :java-cmd "C:\\Program Files\\OpenJDK\\jdk-11.0.2\\bin\\java.exe"
-  ;; :jvm-opts ["-server"]
-  :jvm-opts ["-Dcom.sun.management.jmxremote"
-             ;; "-Dcom.sun.management.jmxremote.port=9005"
+  :java-cmd "C:\\Program Files\\OpenJDK\\jdk-11.0.2\\bin\\java.exe"
+  :jvm-opts ["-server"
+             "-Dcom.sun.management.jmxremote"
              "-Dcom.sun.management.jmxremote.local.only=false"
              "-Dcom.sun.management.jmxremote.authenticate=false"
              "-Dcom.sun.management.jmxremote.ssl=false"])

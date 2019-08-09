@@ -1,6 +1,7 @@
 (ns dwimorberg.proto)
 
 ;; (set! *warn-on-reflection* true)
+;; (set! *unchecked-math* :warn-on-boxed)
 
 (defprotocol IFractionalSingleArityOps
   (^Number floor [_ ^Number n]))
@@ -14,10 +15,9 @@
 (defprotocol IThreeArityOps
   (^Number modpow [_ ^Number x ^Number y ^Number z]))
 
-(defprotocol IDispatch
-  (^ISingleArityOps singleOps [_])
-  (^IFractionalSingleArityOps fracSingleOps [_])
-  (^clojure.lang.Symbol dispatchType [_]))
+(defprotocol IOps
+  (^ISingleArityOps singleOps [_ ^Number n])
+  (^IFractionalSingleArityOps fracSingleOps [_ ^Number n]))
 
 (defprotocol IWithTwo
   (^ITwoArityOps withTwo [_ ^IDispatch n]))

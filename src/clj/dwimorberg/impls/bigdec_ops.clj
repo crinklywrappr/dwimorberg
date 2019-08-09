@@ -5,6 +5,7 @@
            [dwimorberg Common]))
 
 ;; (set! *warn-on-reflection* true)
+;; (set! *unchecked-math* :warn-on-boxed)
 
 (defrecord BigDecxBigDecOps []
   ITwoArityOps
