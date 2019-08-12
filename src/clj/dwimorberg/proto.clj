@@ -20,7 +20,7 @@
   (^IFractionalSingleArityOps fracSingleOps [_ ^Number n]))
 
 (defprotocol IWithTwo
-  (^ITwoArityOps withTwo [_ ^IDispatch n]))
+  (^ITwoArityOps withTwo [_ ^ISingleArityOps n]))
 
 (defprotocol IWithThree
-  (^IThreeArityOps withThree [_ ^IDispatch n]))
+  (^IThreeArityOps withThree [_ ^ISingleArityOps n]))
