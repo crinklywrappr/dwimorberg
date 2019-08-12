@@ -1,8 +1,8 @@
 (ns dwimorberg.impls.bigint-ops
-  (:require [dwimorberg.proto :refer :all])
   (:import [clojure.lang Ratio BigInt]
            [java.math BigInteger BigDecimal RoundingMode MathContext]
-           [dwimorberg Common]))
+           [dwimorberg Common]
+           [dwimorberg.proto ITwoArityOps]))
 
 ;; (set! *warn-on-reflection* true)
 ;; (set! *unchecked-math* :warn-on-boxed)

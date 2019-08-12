@@ -1,21 +1,25 @@
 (ns dwimorberg.core
-  (:require [dwimorberg.proto :as proto]
-            [dwimorberg.impls :refer :all]))
+  (:require [dwimorberg.impls :refer :all]
+            [dwimorberg.impls.long-ops :refer :all]))
 
-;; (set! *warn-on-reflection* true)
+(set! *warn-on-reflection* true)
 ;; (set! *unchecked-math* :warn-on-boxed)
 
-(defn floor ^Number [^Number n]
-  (proto/floor (proto/fracSingleOps *ops* n) n))
+(defn floor [n]
+  (.floor (.fracSingleOps *ops* n) n))
 
-(defn abs ^Number [^Number n]
-  (proto/abs (proto/singleOps *ops* n) n))
+(defn abs [n]
+  (.abs (.singleOps *ops* n) n))
 
-(defn add ^Number [^Number x ^Number y]
-  (-> *ops*
-      (proto/singleOps x)
-      (proto/withTwo y)
-      (proto/add x y)))
+(defn add [x y]
+  (.add
+   ^dwimorberg.impls.long_ops.LongxLongOps
+   (.withTwo
+    ^dwimorberg.impls.LongOps
+    (.singleOps
+     ^dwimorberg.impls.Ops *ops* x)
+    y)
+   x y))
 
 
 ;; with single dispatch record

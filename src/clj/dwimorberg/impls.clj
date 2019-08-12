@@ -1,6 +1,5 @@
 (ns dwimorberg.impls
-  (:require [dwimorberg.proto :refer :all]
-            [dwimorberg.impls.long-ops :refer :all]
+  (:require [dwimorberg.impls.long-ops :refer :all]
             [dwimorberg.impls.double-ops :refer :all]
             [dwimorberg.impls.biginteger-ops :refer :all]
             [dwimorberg.impls.bigint-ops :refer :all]
@@ -8,7 +7,8 @@
             [dwimorberg.impls.bigdec-ops :refer :all])
   (:import [clojure.lang Ratio BigInt]
            [java.math BigInteger BigDecimal RoundingMode MathContext]
-           [dwimorberg Common]))
+           [dwimorberg Common]
+           [dwimorberg.proto IOps IFractionalSingleArityOps ISingleArityOps IWithTwo]))
 
 ;; (set! *warn-on-reflection* true)
 ;; (set! *unchecked-math* :warn-on-boxed)
