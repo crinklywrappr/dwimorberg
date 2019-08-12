@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.jscience/jscience "4.3.1"]
                  [org.apfloat/apfloat "1.9.0"]
+                 [com.taoensso/tufte "2.0.1"]
                  [criterium "0.4.5"]]
   :repl-options {:init-ns dwimorberg.core}
   :source-paths ["src/clj"]
