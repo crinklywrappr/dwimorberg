@@ -6,13 +6,13 @@
 ;; (set! *unchecked-math* :warn-on-boxed)
 
 (defn floor ^Number [^Number n]
-  (proto/floor (proto/fracSingleOps *ops* n) n))
+  (proto/floor (proto/fracSingleOps ops n) n))
 
 (defn abs ^Number [^Number n]
-  (proto/abs (proto/singleOps *ops* n) n))
+  (proto/abs (proto/singleOps ops n) n))
 
 (defn add ^Number [^Number x ^Number y]
-  (-> *ops*
+  (-> ops
       (proto/singleOps x)
       (proto/withTwo y)
       (proto/add x y)))
