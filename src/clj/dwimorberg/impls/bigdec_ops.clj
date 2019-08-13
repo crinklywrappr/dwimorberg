@@ -7,29 +7,29 @@
 ;; (set! *warn-on-reflection* true)
 ;; (set! *unchecked-math* :warn-on-boxed)
 
-(defrecord BigDecxBigDecOps []
+(deftype BigDecxBigDecOps []
   ITwoArityOps
   (add [_ x y] (.add ^BigDecimal x y)))
 
-(defrecord BigDecxLongOps []
+(deftype BigDecxLongOps []
   ITwoArityOps
   (add [_ x y] (.add ^BigDecimal x (BigDecimal/valueOf ^long y))))
 
-(defrecord BigDecxDoubleOps []
+(deftype BigDecxDoubleOps []
   ITwoArityOps
   (add [_ x y] (.add ^BigDecimal x (BigDecimal/valueOf ^double y))))
 
-(defrecord BigDecxBigIntegerOps []
+(deftype BigDecxBigIntegerOps []
   ITwoArityOps
   (add [_ x y] (.add ^BigDecimal x (BigDecimal. ^BigInteger y))))
 
-(defrecord BigDecxBigIntOps []
+(deftype BigDecxBigIntOps []
   ITwoArityOps
   (add [_ x y]
     (.add ^BigDecimal x (BigDecimal. (.toBigInteger ^BigInt y)))))
 
 ;; TODO: don't use max....
-(defrecord BigDecxRatioOps []
+(deftype BigDecxRatioOps []
   ITwoArityOps
   (add [_ x y]
     (if (Common/isInt ^BigDecimal x)

@@ -7,18 +7,18 @@
 ;; (set! *warn-on-reflection* true)
 ;; (set! *unchecked-math* :warn-on-boxed)
 
-(defrecord BigIntxBigIntOps []
+(deftype BigIntxBigIntOps []
   ITwoArityOps
   (add [_ x y] (.add ^BigInt x y)))
 
-(defrecord BigIntxLongOps []
+(deftype BigIntxLongOps []
   ITwoArityOps
   (add [_ x y]
     (if (nil? (.bipart ^BigInt x))
       (Common/add ^long y ^long (.lpart ^BigInt x))
       (.add ^BigInteger (.bipart ^BigInt x) (BigInteger/valueOf ^long y)))))
 
-(defrecord BigIntxDoubleOps []
+(deftype BigIntxDoubleOps []
   ITwoArityOps
   (add [_ x y]
     (if (nil? (.bipart ^BigInt x))
@@ -26,12 +26,12 @@
       (.add (BigDecimal/valueOf ^double y)
             (BigDecimal. ^BigInteger x)))))
 
-(defrecord BigIntxBigIntegerOps []
+(deftype BigIntxBigIntegerOps []
   ITwoArityOps
   (add [_ x y]
     (.add ^BigInteger y (.toBigInteger ^BigInt x))))
 
-(defrecord BigIntxRatioOps []
+(deftype BigIntxRatioOps []
   ITwoArityOps
   (add [_ x y]
     (Ratio.
@@ -42,7 +42,7 @@
        (.toBigInteger ^BigInt x)))
      (denominator y))))
 
-(defrecord BigIntxBigDecOps []
+(deftype BigIntxBigDecOps []
   ITwoArityOps
   (add [_ x y]
     (.add ^BigDecimal y (BigDecimal. (.toBigInteger ^BigInt x)))))

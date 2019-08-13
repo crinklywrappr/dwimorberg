@@ -7,7 +7,7 @@
 ;; (set! *warn-on-reflection* true)
 ;; (set! *unchecked-math* :warn-on-boxed)
 
-(defrecord RatioxRatioOps []
+(deftype RatioxRatioOps []
   ITwoArityOps
   (add [_ x y]
     (let [xnumer (numerator x)
@@ -21,7 +21,7 @@
                (.multiply ynumer xdenom))
          (.multiply xdenom ydenom))))))
 
-(defrecord RatioxLongOps []
+(deftype RatioxLongOps []
   ITwoArityOps
   (add [_ x y]
     (Ratio.
@@ -32,7 +32,7 @@
        (BigInteger/valueOf y)))
      (denominator x))))
 
-(defrecord RatioxDoubleOps []
+(deftype RatioxDoubleOps []
   ITwoArityOps
   (add [_ x y]
     (if (Common/isInt ^double y)
@@ -49,7 +49,7 @@
          (.divide numer denom 32 RoundingMode/HALF_UP)
          (BigDecimal/valueOf ^double y))))))
 
-(defrecord RatioxBigIntegerOps []
+(deftype RatioxBigIntegerOps []
   ITwoArityOps
   (add [_ x y]
     (Ratio.
@@ -58,7 +58,7 @@
       (.multiply (denominator x) y))
      (denominator x))))
 
-(defrecord RatioxBigIntOps []
+(deftype RatioxBigIntOps []
   ITwoArityOps
   (add [_ x y]
     (Ratio.
@@ -70,7 +70,7 @@
      (denominator x))))
 
 ;; TODO: don't use max....
-(defrecord RatioxBigDecOps []
+(deftype RatioxBigDecOps []
   ITwoArityOps
   (add [_ x y]
     (if (Common/isInt ^BigDecimal y)

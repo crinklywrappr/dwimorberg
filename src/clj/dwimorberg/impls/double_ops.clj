@@ -7,21 +7,21 @@
 ;; (set! *warn-on-reflection* true)
 ;; (set! *unchecked-math* :warn-on-boxed)
 
-(defrecord DoublexLongOps []
+(deftype DoublexLongOps []
   ITwoArityOps
   (add [_ x y] (Common/add ^double x ^long y)))
 
-(defrecord DoublexDoubleOps []
+(deftype DoublexDoubleOps []
   ITwoArityOps
   (add [_ x y] (Common/add ^double x ^double y)))
 
-(defrecord DoublexBigIntegerOps []
+(deftype DoublexBigIntegerOps []
   ITwoArityOps
   (add [_ x y]
     (.add (BigDecimal/valueOf ^double x)
           (BigDecimal. ^BigInteger y))))
 
-(defrecord DoublexBigIntOps []
+(deftype DoublexBigIntOps []
   ITwoArityOps
   (add [_ x y]
     (if (nil? (.bipart ^BigInt y))
@@ -29,7 +29,7 @@
       (.add (BigDecimal/valueOf ^double x)
             (BigDecimal. ^BigInteger y)))))
 
-(defrecord DoublexRatioOps []
+(deftype DoublexRatioOps []
   ITwoArityOps
   (add [_ x y]
     (if (Common/isInt ^double x)
@@ -46,6 +46,6 @@
          (.divide numer denom 32 RoundingMode/HALF_UP)
          (BigDecimal/valueOf ^double x))))))
 
-(defrecord DoublexBigDecOps []
+(deftype DoublexBigDecOps []
   ITwoArityOps
   (add [_ x y] (.add ^BigDecimal y (BigDecimal/valueOf ^double x))))

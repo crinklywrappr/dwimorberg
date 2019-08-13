@@ -56,7 +56,7 @@
 (def ^:dynamic *bigdec-x-ratio-ops* (->BigDecxRatioOps))
 
 
-(defrecord LongOps []
+(deftype LongOps []
   ISingleArityOps
   (abs [_ n] (Math/abs ^long n))
   IWithTwo
@@ -69,7 +69,7 @@
       (instance? Ratio n) *long-x-ratio-ops*
       (instance? BigDecimal n) *long-x-bigdec-ops*)))
 
-(defrecord DoubleOps []
+(deftype DoubleOps []
   IFractionalSingleArityOps
   (floor [_ n]
     (if (< Common/BOT_DOUBLE n Common/TOP_DOUBLE)
@@ -87,7 +87,7 @@
       (instance? Ratio n) *double-x-ratio-ops*
       (instance? BigDecimal n) *double-x-bigdec-ops*)))
 
-(defrecord BigIntegerOps []
+(deftype BigIntegerOps []
   ISingleArityOps
   (abs [_ n] (.abs ^BigInteger n))
   IWithTwo
@@ -100,7 +100,7 @@
       (instance? Ratio n) *biginteger-x-ratio-ops*
       (instance? BigDecimal n) *biginteger-x-bigdec-ops*)))
 
-(defrecord BigIntOps []
+(deftype BigIntOps []
   ISingleArityOps
   (abs [_ n]
     (if (nil? (.bipart ^BigInt n))
@@ -116,7 +116,7 @@
       (instance? Ratio n) *bigint-x-ratio-ops*
       (instance? BigDecimal n) *bigint-x-bigdec-ops*)))
 
-(defrecord RatioOps []
+(deftype RatioOps []
   IFractionalSingleArityOps
   (floor [_ n]
     (let [numer (numerator n)
@@ -147,7 +147,7 @@
       (instance? Ratio n) *ratio-x-ratio-ops*
       (instance? BigDecimal n) *ratio-x-bigdec-ops*)))
 
-(defrecord BigDecOps []
+(deftype BigDecOps []
   IFractionalSingleArityOps
   (floor [_ n]
     (.setScale ^BigDecimal n 0 RoundingMode/FLOOR))
@@ -163,7 +163,7 @@
       (instance? Ratio n) *bigdec-x-ratio-ops*
       (instance? BigDecimal n) *bigdec-x-bigdec-ops*)))
 
-(defrecord DefaultOps []
+(deftype DefaultOps []
   IFractionalSingleArityOps
   (floor [_ n] n))
 
@@ -177,7 +177,7 @@
 (def ^:dynamic *default-ops* (->DefaultOps))
 
 
-(defrecord Ops []
+(deftype Ops []
   IOps
   (singleOps [_ n]
     (cond
